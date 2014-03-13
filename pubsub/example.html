@@ -1,0 +1,53 @@
+<html>
+<head>
+	<title>PubSub Example</title>
+</head>
+<body>
+	<button id="botao">teste</button>
+	<h2 class="carrinho-grande">
+		Items:
+		<span id="quantidade">0</span>
+		Total:
+		<span id="valor"></span>
+	</h2>
+
+	<h4 class="carrinho-pequeno">
+		Items:
+		<span id="quantidade">0</span>
+		Total:
+		<span id="valor"></span>
+	</h4>	
+	<script src="pubsub.js"></script>
+	<script>
+		Nevermind.PubSub.subscribe("clicar-botao", function(data) {
+			var quantidadeElement = document.querySelector(".carrinho-grande #quantidade");
+			var valorElement = document.querySelector(".carrinho-grande #valor");
+
+			var q = parseInt(quantidadeElement.innerHTML) + 1;
+			var total = q * data.price;
+
+			quantidadeElement.innerHTML = q;
+			valorElement.innerHTML = total;
+
+			console.log("adicionando item no carrinho grande");
+		});
+
+		Nevermind.PubSub.subscribe("clicar-botao", function(data) {
+			var quantidadeElement = document.querySelector(".carrinho-pequeno #quantidade");
+			var valorElement = document.querySelector(".carrinho-pequeno #valor");
+
+			var q = parseInt(quantidadeElement.innerHTML) + 1;
+			var total = q * data.price;
+
+			quantidadeElement.innerHTML = q;
+			valorElement.innerHTML = total;
+
+			console.log("adicionando item no carrinho pequeno");
+		});
+
+		document.querySelector("#botao").addEventListener("click", function() {
+			Nevermind.PubSub.publish("clicar-botao", { price: 12.5 });
+		});
+	</script>
+</body>
+</html>
