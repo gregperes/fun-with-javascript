@@ -19,7 +19,7 @@
 	</h4>	
 	<script src="pubsub.js"></script>
 	<script>
-		Nevermind.PubSub.subscribe("clicar-botao", function(data) {
+		Nevermind.dispatcher.on("clicar-botao", function(data) {
 			var quantidadeElement = document.querySelector(".carrinho-grande #quantidade");
 			var valorElement = document.querySelector(".carrinho-grande #valor");
 
@@ -32,7 +32,7 @@
 			console.log("adicionando item no carrinho grande");
 		});
 
-		Nevermind.PubSub.subscribe("clicar-botao", function(data) {
+		Nevermind.dispatcher.on("clicar-botao", function(data) {
 			var quantidadeElement = document.querySelector(".carrinho-pequeno #quantidade");
 			var valorElement = document.querySelector(".carrinho-pequeno #valor");
 
@@ -46,7 +46,7 @@
 		});
 
 		document.querySelector("#botao").addEventListener("click", function() {
-			Nevermind.PubSub.publish("clicar-botao", { price: 12.5 });
+			Nevermind.dispatcher.trigger("clicar-botao", { price: 12.5 });
 		});
 	</script>
 </body>

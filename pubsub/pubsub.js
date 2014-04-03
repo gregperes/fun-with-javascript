@@ -11,7 +11,8 @@ this.Nevermind = this.Nevermind || {};
     });
 
     PubSub.prototype._getListener = function(eventName) {
-        return this._listeners[eventName] = this._listeners[eventName] || [];
+        this._listeners[eventName] = this._listeners[eventName] || [];
+        return this._listeners[eventName];
     };
 
     PubSub.prototype.subscribe = function(eventName, callback) {
@@ -19,11 +20,11 @@ this.Nevermind = this.Nevermind || {};
     };
 
     PubSub.prototype.publish = function(eventName, data) {
-        var listener = this._getListener(eventName);
-        var length = listener.length;
-        var i = 0;
+        var listener = this._getListener(eventName),
+            length = listener.length,
+            i = 0;
 
-        for (i = 0; i < length; i = i + 1) {
+        for (; i < length; i = i + 1) {
             listener[i](data);
         }
     };
@@ -31,3 +32,54 @@ this.Nevermind = this.Nevermind || {};
     nevermind.PubSub = new PubSub();
 
 }(this.Nevermind));
+
+(function(global) {
+
+    "use strict";
+
+    var dispatcher = (function() {
+
+        var listeners = [],
+
+            getListener = function(eventName) {
+
+                listeners[eventName] = listeners[eventName] || [];
+                return listeners[eventName];
+
+            },
+
+            trigger = function(eventName, data) {
+
+                var listener = getListener(eventName),
+                    length = listener.length,
+                    i = 0;
+
+                for (; i < length; i = i + 1) {
+
+                    listener[i](data);
+
+                }
+
+            },
+
+            on = function(eventName, callback) {
+
+                getListener(eventName).push(callback);
+
+            };
+
+        return {
+
+            getListener: getListener,
+
+            on: on,
+
+            trigger: trigger
+
+        };
+
+    })();
+
+    global.dispatcher = dispatcher;
+
+})(this.Nevermind || {});
